@@ -19,29 +19,45 @@ public class MainParkingLot {
 		
 		System.out.println("Created a parking lot with "+n+" slots");
 		
-		Map<Integer, Vihacle> map = new HashMap<Integer, Vihacle>();
-		
+		final Map<Integer, Vihacle> map = new HashMap<Integer, Vihacle>();
 		for(int k =0; k<n; k++){
-			String actWrite = reader.nextLine();
+			Scanner reader2 = new Scanner(System.in);
+			String actWrite = reader2.nextLine();
 			groupingVihacle(actWrite, map, k);	
 		}
 		
+		final Scanner reader3 = new Scanner(System.in);
 		
-		String actWrite = reader.nextLine();
-		String action = getAction(actWrite);
-		if("PARK".equalsIgnoreCase(action)){
-			
-		}else if("LEAVE".equalsIgnoreCase(action)){
-			
-		}else if("STATUS".equalsIgnoreCase(action)){
-			showStatus(map);
-		}
-			
+		new Thread(){
+			public void run(){
+				while(true){
+					String next = reader3.next();
+					//String actWrite = reader3.nextLine();
+					String action = getAction(next);
+					if("PARK".equalsIgnoreCase(action)){
+						System.out.println("panggil PARK - no action");
+					}else if("LEAVE".equalsIgnoreCase(action)){
+						System.out.println("panggil LEAVE- no action");
+						
+					}else if("STATUS".equalsIgnoreCase(action)){
+						showStatus(map);
+					}else if("EXIT".equalsIgnoreCase(action)){
+						
+					}
+				}
+			}
+		}.start();
 		
 	}
 
 	private static void showStatus(Map<Integer, Vihacle> map) {
-		// TODO Auto-generated method stub
+		System.out.println("No    Registration No.    Colour");
+		for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
+			String idVihacle = entry.getValue().getIdNumber();
+			String colour = entry.getValue().getColour();
+			int no = entry.getKey();
+			System.out.println(""+no+"    "+idVihacle+"        "+colour);
+		}
 		
 	}
 
@@ -54,9 +70,9 @@ public class MainParkingLot {
 
 	private static void groupingVihacle(String write, Map<Integer, Vihacle> map, int number) {
 		
-		String[] idVcRaw = write.split("\\s+");
-		String idVc = idVcRaw[0];
-		String col = idVcRaw[1];
+		String[] idVcRaw = write.split("\\s");
+		String idVc = idVcRaw[1];
+		String col = idVcRaw[2];
 		
 		Vihacle vc = new Vihacle();
 		vc.setIdNumber(idVc);
