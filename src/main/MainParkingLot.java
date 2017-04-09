@@ -13,6 +13,8 @@ import model.Vihacle;
 public class MainParkingLot {
 	
 	public final static String REGISTRATION_NUMBER = "registration_number_for_cars_with_colour";
+	public final static String SLOT_NUMBER = "slot_number_for_registration_number";
+	public final static String SLOT_BASEDON_COLOUR = "slot_numbers_for_cars_with_colour";
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -41,7 +43,7 @@ public class MainParkingLot {
 					String next = reader3.nextLine();
 					String action = getAction(next);
 					if("PARK".equalsIgnoreCase(action)){
-						System.out.println("panggil PARK");
+						//System.out.println("panggil PARK");
 						// cek apakah jumlah spacenya sesuai
 						int space = map.size();
 						if(space<n){
@@ -54,18 +56,29 @@ public class MainParkingLot {
 							System.out.println("Sorry, parking lot is full");
 						}
 						
-					}else if("LEAVE".equalsIgnoreCase(action)){
-						System.out.println("panggil LEAVE- no action");
+					}
+					else if("LEAVE".equalsIgnoreCase(action)){
+						//System.out.println("panggil LEAVE- no action");
 						int noLeave = getNoLeave(next);
 						removeMapContain(map, noLeave);
 						System.out.println("Slot number "+noLeave+" is Free");
 					
-					}else if("STATUS".equalsIgnoreCase(action)){
+					}
+					else if("STATUS".equalsIgnoreCase(action)){
 						showStatus(map);
 						
-					}else if(REGISTRATION_NUMBER.equalsIgnoreCase(action)){
-						String col = getThatCars(next);
+					}
+					else if(REGISTRATION_NUMBER.equalsIgnoreCase(action)){
+						String col = getThatInfo(next);
 						showTheCars(col, map);
+					}
+					else if(SLOT_BASEDON_COLOUR.equalsIgnoreCase(action)){
+						String col = getThatInfo(next);
+						showGroupSlot(col, map);
+					}
+					else if(SLOT_NUMBER.equalsIgnoreCase(action)){
+						String rgistNo = getThatInfo(next);
+						showTheSlot(rgistNo, map);
 					}
 					else if("EXIT".equalsIgnoreCase(action)){
 						isRunning = false;
@@ -73,6 +86,34 @@ public class MainParkingLot {
 					}else{
 						System.out.println("CHECK YOUR ACTION");
 					}
+				}
+			}
+
+			private void showGroupSlot(String col, Map<Integer, Vihacle> map) {
+				List<Integer> lsSlots = new ArrayList<Integer>();
+				for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
+					String colEnt = entry.getValue().getColour();
+					if(col.equalsIgnoreCase(colEnt)){
+						int sl = entry.getKey();
+						lsSlots.add(sl);
+					}
+				}
+				
+				System.out.println(lsSlots.toString());
+			}
+
+			private void showTheSlot(String rgistNo, Map<Integer, Vihacle> map) {
+				boolean find = false;
+				for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
+					String reg = entry.getValue().getIdNumber();
+					if(rgistNo.equalsIgnoreCase(reg)){
+						find = true;
+						System.out.println(entry.getKey());
+					}
+				}
+				
+				if(find == false){
+					System.out.println("Not Found");
 				}
 			}
 
@@ -84,10 +125,15 @@ public class MainParkingLot {
 						cars.add(entry.getValue().getIdNumber());
 					}
 				}
-				System.out.println(cars.toString());
+				if(cars.size()>0){
+					System.out.println(cars.toString());	
+				}else{
+					System.out.println("Not Found");
+				}
+				
 			}
 
-			private String getThatCars(String next) {
+			private String getThatInfo(String next) {
 				String[] arr = next.split("\\s");
 				String col = arr[1];
 				return col;
