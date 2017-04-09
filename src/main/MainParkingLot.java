@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,10 +11,13 @@ import model.Vihacle;
 
 
 public class MainParkingLot {
+	
+	public final static String REGISTRATION_NUMBER = "registration_number_for_cars_with_colour";
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 			//System.out.println("Hello world, by nanda");
+		
 		Scanner reader = new Scanner(System.in);
 		System.out.println("create_parking_lot :");
 		final int n = reader.nextInt();
@@ -32,7 +36,8 @@ public class MainParkingLot {
 		
 		new Thread(){
 			public void run(){
-				while(true){
+				 boolean isRunning = true;
+				while(isRunning){
 					String next = reader3.nextLine();
 					String action = getAction(next);
 					if("PARK".equalsIgnoreCase(action)){
@@ -41,7 +46,7 @@ public class MainParkingLot {
 						int space = map.size();
 						if(space<n){
 							// bisa diisi
-							int lostNum = getLostNum(map);
+							int lostNum = getLostNum(map, n);
 							groupingVihacle(next, map, lostNum);
 							
 						}else{
@@ -57,20 +62,45 @@ public class MainParkingLot {
 					
 					}else if("STATUS".equalsIgnoreCase(action)){
 						showStatus(map);
-					}else if("EXIT".equalsIgnoreCase(action)){
 						
+					}else if(REGISTRATION_NUMBER.equalsIgnoreCase(action)){
+						String col = getThatCars(next);
+						showTheCars(col, map);
+					}
+					else if("EXIT".equalsIgnoreCase(action)){
+						isRunning = false;
+						System.out.println("THREAD STOP");
+					}else{
+						System.out.println("CHECK YOUR ACTION");
 					}
 				}
 			}
 
-			private int getLostNum(Map<Integer, Vihacle> map) {
+			private void showTheCars(String col, Map<Integer, Vihacle> map) {
+				List<String> cars = new ArrayList<String>();
+				for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
+					String mapCol = entry.getValue().getColour();
+					if(col.equalsIgnoreCase(mapCol)){
+						cars.add(entry.getValue().getIdNumber());
+					}
+				}
+				System.out.println(cars.toString());
+			}
+
+			private String getThatCars(String next) {
+				String[] arr = next.split("\\s");
+				String col = arr[1];
+				return col;
+			}
+
+			private int getLostNum(Map<Integer, Vihacle> map, int space) {
 				int sizeMap = map.size();
 				int findLostNum = 0;
-				for(int i =0; i<sizeMap; i++){
+				for(int i =0; i<space; i++){
 					for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
 						int key = entry.getKey();
-						if(i==key){
-							findLostNum = key;
+						if(i!=key){
+							findLostNum = i;
 							break;
 						}	
 					}	
