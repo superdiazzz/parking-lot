@@ -41,6 +41,8 @@ public class MainParkingLot {
 						int space = map.size();
 						if(space<n){
 							// bisa diisi
+							int lostNum = getLostNum(map);
+							groupingVihacle(next, map, lostNum);
 							
 						}else{
 							// full
@@ -59,6 +61,21 @@ public class MainParkingLot {
 						
 					}
 				}
+			}
+
+			private int getLostNum(Map<Integer, Vihacle> map) {
+				int sizeMap = map.size();
+				int findLostNum = 0;
+				for(int i =0; i<sizeMap; i++){
+					for(Map.Entry<Integer, Vihacle> entry : map.entrySet()){
+						int key = entry.getKey();
+						if(i==key){
+							findLostNum = key;
+							break;
+						}	
+					}	
+				}
+				return findLostNum;
 			}
 
 			private int getNoLeave(String next) {
@@ -90,7 +107,7 @@ public class MainParkingLot {
 			String idVihacle = entry.getValue().getIdNumber();
 			String colour = entry.getValue().getColour();
 			int no = entry.getKey();
-			System.out.println(""+no+"      "+idVihacle+"        "+colour);
+			System.out.println(""+no+"      "+idVihacle+"          "+colour);
 		}
 		
 	}
