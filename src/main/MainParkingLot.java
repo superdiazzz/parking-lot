@@ -20,6 +20,21 @@ public class MainParkingLot {
 		// TODO Auto-generated method stub
 			//System.out.println("Hello world, by nanda");
 		
+		if(args.length>0){
+			testCaseExceution(args);
+		}else{
+			manualExecution();
+		}
+		
+	}
+
+	private static void testCaseExceution(String[] args) {
+		// TODO eksekusi melalui test case
+		
+		System.out.println("create_parking_lot :");
+	}
+
+	private static void manualExecution() {
 		Scanner reader = new Scanner(System.in);
 		System.out.println("create_parking_lot :");
 		final int n = reader.nextInt();
@@ -50,6 +65,7 @@ public class MainParkingLot {
 							// bisa diisi
 							int lostNum = getLostNum(map, n);
 							groupingVihacle(next, map, lostNum);
+							System.out.println("Allocated slot number : "+lostNum);
 							
 						}else{
 							// full
@@ -174,7 +190,6 @@ public class MainParkingLot {
 			}
 
 		}.start();
-		
 	}
 
 	private static void showStatus(Map<Integer, Vihacle> map) {
